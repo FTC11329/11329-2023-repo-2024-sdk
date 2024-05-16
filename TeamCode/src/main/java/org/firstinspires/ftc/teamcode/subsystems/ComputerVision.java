@@ -7,28 +7,21 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.fizzyapple12.javadi.DiContainer;
 import com.fizzyapple12.javadi.DiInterfaces;
 
-
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-
 import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCamera;
-
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import java.util.ArrayList;
 
 
 public class ComputerVision implements DiInterfaces.IInitializable, DiInterfaces.IDisposable {
+    static final double FEET_PER_METER = 3.28084;
     @DiContainer.Inject(id = "webcam")
     OpenCvCamera camera;
-
     @DiContainer.Inject()
     Telemetry telemetry;
-
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
-
-    static final double FEET_PER_METER = 3.28084;
-
     // Lens intrinsics
     // UNITS ARE PIXELS
     // NOTE: this calibration is for the C920 webcam at 800x448.
@@ -123,9 +116,9 @@ public class ComputerVision implements DiInterfaces.IInitializable, DiInterfaces
         telemetry.addLine(String.format("Translation X: %.2f feet", detection.pose.x * FEET_PER_METER));
         telemetry.addLine(String.format("Translation Y: %.2f feet", detection.pose.y * FEET_PER_METER));
         telemetry.addLine(String.format("Translation Z: %.2f feet", detection.pose.z * FEET_PER_METER));
-        telemetry.addLine(String.format("Rotation Yaw: %.2f degrees", Math.toDegrees(detection.pose.yaw)));
-        telemetry.addLine(String.format("Rotation Pitch: %.2f degrees", Math.toDegrees(detection.pose.pitch)));
-        telemetry.addLine(String.format("Rotation Roll: %.2f degrees", Math.toDegrees(detection.pose.roll)));
+//        telemetry.addLine(String.format("Rotation Yaw: %.2f degrees", Math.toDegrees(detection.pose.yaw)));
+//        telemetry.addLine(String.format("Rotation Pitch: %.2f degrees", Math.toDegrees(detection.pose.pitch)));
+//        telemetry.addLine(String.format("Rotation Roll: %.2f degrees", Math.toDegrees(detection.pose.roll)));
     }
 
     @Override
