@@ -14,6 +14,9 @@ import org.firstinspires.ftc.teamcode.subsystems.Slides;
 import org.firstinspires.ftc.teamcode.utilities.RobotSide;
 
 public class TeleopDrive implements DiInterfaces.ITickable, DiInterfaces.IInitializable {
+    public static boolean beacon = false;
+    public static boolean manualAdjust = false;
+    public static boolean auto = false;
     @DiContainer.Inject(id = "gamepad1")
     public Gamepad gamepad1;
     @DiContainer.Inject(id = "gamepad2")
@@ -24,24 +27,32 @@ public class TeleopDrive implements DiInterfaces.ITickable, DiInterfaces.IInitia
     public Claw claw;
     @DiContainer.Inject()
     public RobotSide side;
+    public int slidePosition = 0;
+    public int tempSlidePosition = 0;
+    public boolean reverse = false;
+    public boolean preset = false;
     @DiContainer.Inject()
     Telemetry telemetry;
     @DiContainer.Inject()
     Drivetrain drivetrain;
     @DiContainer.Inject()
     Slides slides;
-    private double maxSpeed;
     @DiContainer.Inject()
     Brace brace;
-
-    public int slidePosition = 0;
-    public int tempSlidePosition = 0;
-    public boolean reverse = false;
-    public boolean preset = false;
-    public static boolean beacon = false;
-    public static boolean manualAdjust = false;
-    public static boolean auto = false;
+    private double maxSpeed;
     private boolean releaseContorller = false;
+
+    public static void setBeacon(boolean tempBeacon) {
+        beacon = tempBeacon;
+    }
+
+    public static void setManualAdjust(boolean manualAdjustTemp) {
+        manualAdjust = manualAdjustTemp;
+    }
+
+    public static boolean callBeacon() {
+        return beacon;
+    }
 
     @Override
     public void onTick() {
@@ -62,6 +73,7 @@ public class TeleopDrive implements DiInterfaces.ITickable, DiInterfaces.IInitia
         } else {
             maxSpeed = RobotConfig.Drivetrain.slowSpeed;
         }
+
         if (gamepad2.left_stick_y > 0.1 || gamepad2.left_stick_y < -0.1 || gamepad2.left_trigger > 0.1 || gamepad2.right_trigger > 0.1) {
             manualAdjust = true;
         }
@@ -70,10 +82,9 @@ public class TeleopDrive implements DiInterfaces.ITickable, DiInterfaces.IInitia
 
         slides.setRightTriggerState(gamepad2.right_trigger == 0);
         slidePosition += (upPower - downPower) * RobotConfig.Slides.manualSlidePower;
-        if(slidePosition ==  RobotConfig.Presets.SlidesHighRev && claw.slidesOffset != 0){
-            tempSlidePosition = slidePosition + claw.slidesOffset ;
-        }
-        else{
+        if (slidePosition == RobotConfig.Presets.SlidesHighRev && claw.slidesOffset != 0) {
+            tempSlidePosition = slidePosition + claw.slidesOffset;
+        } else {
             tempSlidePosition = slidePosition + claw.slidesOffset;
         }
 
@@ -93,18 +104,18 @@ public class TeleopDrive implements DiInterfaces.ITickable, DiInterfaces.IInitia
         if (grab) claw.toggle();
         else claw.resetToggle();
 
-        if (gamepad2.right_stick_button){
+        if (gamepad2.right_stick_button) {
             claw.halfGrab();
         }
         if (gamepad2.back) {
-            if (releaseContorller == true) {
+            if (releaseContorller) {
                 claw.autoRelease = !claw.autoRelease;
                 releaseContorller = false;
             }
         } else {
-           if(releaseContorller == false){
-               releaseContorller = true;
-           }
+            if (!releaseContorller) {
+                releaseContorller = true;
+            }
         }
 
 
@@ -232,7 +243,7 @@ public class TeleopDrive implements DiInterfaces.ITickable, DiInterfaces.IInitia
 //            claw.setPresetBool(false);
 //        }
         //Beacon pickup
-        if (gamepad2.x){
+        if (gamepad2.x) {
 
             claw.grab();
             brace.setBraceEnabled(false);
@@ -290,17 +301,6 @@ public class TeleopDrive implements DiInterfaces.ITickable, DiInterfaces.IInitia
             claw.autoRelease = true;
             claw.setPos(RobotConfig.Presets.WristPickupRev);
         }
-    }
-
-    public static void setBeacon (boolean tempBeacon) {
-        beacon = tempBeacon;
-    }
-    public static void setManualAdjust (boolean manualAdjustTemp) {
-        manualAdjust = manualAdjustTemp;
-    }
-
-    public static boolean callBeacon () {
-        return beacon;
     }
 
     @Override

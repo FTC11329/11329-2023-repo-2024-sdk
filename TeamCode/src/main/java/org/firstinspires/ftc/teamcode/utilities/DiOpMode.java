@@ -14,11 +14,13 @@ public abstract class DiOpMode extends OpMode {
 
     @Override
     public void init() {
+
         try {
             Install();
         } catch (Exception e) {
-            telemetry.log().add("Failed to Init, robot will die now");
+            throw new RuntimeException(e);
         }
+
 
         Container.onInject();
     }

@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.config.Config;
+
 import org.firstinspires.ftc.teamcode.utilities.LEDEffect;
 
 import java.util.ArrayList;
@@ -149,6 +151,7 @@ public class RobotConfig {
         public static double kf = 0.00;
     }
 
+    @Config
     public static class Claw {
 
         public static int clawMinRange = 0;
@@ -160,7 +163,7 @@ public class RobotConfig {
         public static String handServo2 = "wristServo2";
         public static double closePos = 0.3;
         public static double halfPos = 0.235;
-        public static double openPos = 0.1;
+        public static double openPos = 0.5;
 
         public static double maxConeDistance = 8; //CM
         public static int maxAutoGrabHeight = -200;
